@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campo de Fútbol 7</title>
+    <style>
+        /* Estilos para el campo de fútbol 7 */
+        .campo {
+            width: 800px;
+            height: 400px;
+            background-color: green;
+            position: relative;
+            margin: 0 auto;
+        }
+
+        /* Estilos para las posiciones de los jugadores */
+        .posicion {
+            position: absolute;
+            color: white;
+            font-size: 12px;
+        }
+
+        /* Botón para repartir jugadores */
+        button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Campo de Fútbol 7</h1>
+
+    <div class="campo" id="campo">
+        <!-- Aquí se colocarán las posiciones de los jugadores -->
+        <div class="posicion" style="top: 10px; left: 10px;">Portero</div>
+        <div class="posicion" style="top: 100px; left: 50px;">Defensa</div>
+        <div class="posicion" style="top: 200px; left: 50px;">Defensa</div>
+        <div class="posicion" style="top: 100px; left: 200px;">Medio</div>
+        <div class="posicion" style="top: 200px; left: 200px;">Medio</div>
+        <div class="posicion" style="top: 100px; left: 350px;">Delantero</div>
+        <div class="posicion" style="top: 200px; left: 350px;">Delantero</div>
+    </div>
+
+    <button id="repartirJugadores">Repartir Jugadores</button>
+
+    <script>
+        const jugadores = [
+            { nombre: "Portero", posicion: "Portero" },
+            { nombre: "Jugador 1", posicion: "Defensa" },
+            { nombre: "Jugador 2", posicion: "Defensa" },
+            { nombre: "Jugador 3", posicion: "Medio" },
+            { nombre: "Jugador 4", posicion: "Medio" },
+            { nombre: "Jugador 5", posicion: "Delantero" },
+            { nombre: "Jugador 6", posicion: "Delantero" },
+            // Agrega más jugadores y posiciones según sea necesario
+        ];
+
+        document.getElementById("repartirJugadores").addEventListener("click", function () {
+            const campo = document.getElementById("campo");
+
+            // Elimina jugadores anteriores del campo
+            const jugadoresAnteriores = campo.querySelectorAll(".jugador");
+            jugadoresAnteriores.forEach(function (jugador) {
+                campo.removeChild(jugador);
+            });
+
+            // Reparte jugadores en el campo según sus posiciones
+            jugadores.forEach(function (jugador) {
+                const jugadorElement = document.createElement("div");
+                jugadorElement.classList.add("posicion", "jugador");
+                jugadorElement.textContent = jugador.nombre;
+
+                // Establece la posición del jugador en el campo según su posición
+                switch (jugador.posicion) {
+                    case "Portero":
+                        jugadorElement.style.top = "10px";
+                        jugadorElement.style.left = "10px";
+                        break;
+                    case "Defensa":
+                        jugadorElement.style.top = "100px";
+                        jugadorElement.style.left = "50px";
+                        break;
+                    case "Medio":
+                        jugadorElement.style.top = "200px";
+                        jugadorElement.style.left = "200px";
+                        break;
+                    case "Delantero":
+                        jugadorElement.style.top = "100px";
+                        jugadorElement.style.left = "350px";
+                        break;
+                    // Agrega más casos según las posiciones que necesites
+                }
+
+                campo.appendChild(jugadorElement);
+            });
+        });
+    </script>
+</body>
+</html>

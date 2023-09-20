@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jugadores</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+
+    <h1>Jugadores</h1>
+    
+    <!-- Formulario -->
+    <form id="jugadorRol">
+        <!-- Campo de texto -->
+        <label for="texto">Jugador:</label>
+        <input type="text" id="nombreJugador" required>
+        
+        <!-- Selector -->
+        <label for="rol">Rol:</label>
+        <select id="rol" required>
+            <option value="Defensa">Defensa</option>
+            <option value="Medio Campo">Medio Campo</option>
+            <option value="Delantero">Delantero</option>
+        </select>
+        
+        <!-- Botones -->
+        <button type="button" id="añadir">Añadir Jugador</button>
+        <button type="button" id="generar">Generar Equipos</button>
+    </form>
+    
+    <!-- Lista de elementos -->
+    <h2>Lista de jugadores:</h2>
+    <ul id="listaJugadores">
+        <li id="listaDefensas">Defensas: <span id="defensasNombres"></span></li>
+        <li id="listaMedioCampo">Centrocampistas: <span id="medioCampoNombres"></span></li>
+        <li id="listaDelantero">Delanteros: <span id="delanteroNombres"></span></li>
+    </ul>
+    
+    <div id="listaEquipos">
+       <span id="table1"></span>
+       <span id="table2"></span>
+    </div>
+      
+   
+    
+
+
+
+    <!-- Script para manejar el formulario -->
+    <script>
+        let defensas =[];
+        let centrocampistas =[];
+        let delanteros =[];
+        document.addEventListener("DOMContentLoaded", function () {
+            
+            const nombreJugador = document.getElementById("nombreJugador");
+            const rolSelect = document.getElementById("rol");
+            const listaElementos = document.getElementById("listaJugadores");
+            const agregarBoton = document.getElementById("añadir");
+            const guardarBoton = document.getElementById("generar");
+           
+            // Al hacer clic en "Agregar a la lista"
+            agregarBoton.addEventListener("click", function () {
+                const texto = nombreJugador.value;
+                const opcion = rolSelect.value;
+                
+
+                if (texto.trim() !== "") {
+                    switch (opcion) {
+                        case "Defensa":
+                        defensas.push(texto);
+                            document.getElementById("defensasNombres").textContent = defensas.join(", ");
+                            break;
+                        case "Medio Campo":
+                            centrocampistas.push(texto);
+                            document.getElementById("medioCampoNombres").textContent = centrocampistas.join(", ");
+                            break;
+                        case "Delantero":
+                            delanteros.push(texto);
+                            document.getElementById("delanteroNombres").textContent = delanteros.join(", ");
+                            break;
+                        default:
+                            console.log("rol no encontrado");
+                    }
+                    
+                    // Limpiar el campo de texto
+                    nombreJugador.value = "";
+                } else {
+                    alert("El campo de texto no puede estar vacío.");
+                }
+            });
+
+            // Al hacer clic en "Guardar lista"
+            guardarBoton.addEventListener("click", generarEquipos);
+        });
+
+        function shuffle(array) {
+            let currentIndex = array.length, randomIndex;
+
+            while (currentIndex !== 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+
+            return array;
+        }
+
+        function generarEquipos() {
+            shuffle(defensas);
+            shuffle(centrocampistas);
+            shuffle(delanteros);
+
+            let equipo1 = {
+                defensas: defensas.slice(0, defensas.length/2),
+                centrocampistas: centrocampistas.slice(0, centrocampistas.length/2),
+                delanteros: delanteros.slice(0, delanteros.length/2)
+            }
+
+            let equipo2 = {
+                defensas: defensas.slice(defensas.length/2),
+                centrocampistas: centrocampistas.slice(centrocampistas.length/2),
+                delanteros: delanteros.slice(delanteros.length/2)
+            }
+
+            console.log("Equipo 1", equipo1);
+            console.log("Equipo 2", equipo2);
+            //Longitud de la tabla.
+           
+                crearTabla(equipo1,equipo2)           
+                //Quita las listas de los jugadores.
+                const lista = document.getElementById("listaJugadores");
+                lista.innerHTML="";
+        }
+
+
+        function crearTabla(equipo1, equipo2) {
+            // Crear el elemento de tabla
+            const tabla = document.createElement("table");
+
+            // Crear encabezados de tabla
+            const encabezado = tabla.createTHead();
+            const filaEncabezado = encabezado.insertRow();
+            const encabezado1 = document.createElement("th");          
+            encabezado.textContent = "Equipo 1";
+            filaEncabezado.appendChild(encabezado1);
+            // Crear filas de datos
+            const cuerpo = tabla.createTBody();
+            for (let i = 0; i <= equipo1.length; i++) {
+
+                equipo1.defensas.forEach(function(elemento){
+                    const fila = cuerpo.insertRow();
+                    const celda1 = fila.insertCell();
+                    celda1.textContent = `${elemento}`;
+                });  
+            }
+
+            // Agregar estilos (opcional)
+            tabla.style.borderCollapse = "collapse";
+            tabla.style.border = "1px solid #ccc";
+
+            // Agregar la tabla al contenedor
+            const contenedor = document.getElementById("listaEquipos");
+            contenedor.appendChild(tabla);
+        }
+
+    </script>
+</body>
+</html>
