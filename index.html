@@ -8,24 +8,34 @@
 </head>
 <body>
 
-    <h1>Jugadores</h1>
-    
-    <form id="jugadorRol">
-        <label for="texto">Jugador:</label>
-        <input type="text" id="nombreJugador" required>
+    <div class="container">
+        <h1>Generador</h1>
+        <div id="alert" class="alert" style="display: none;"></div>
+
+        <form id="jugadorRol" class="form">
+            <div class="form-row">
+                <div class="input-group">
+                    <label for="texto">Jugador:</label>
+                    <input type="text" id="nombreJugador" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="rol">Rol:</label>
+                    <select id="rol" required>
+                        <option value="Defensa">Defensa</option>
+                        <option value="Medio Campo">Medio Campo</option>
+                        <option value="Delantero">Delantero</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="button-group">
+                <button type="button" id="añadir" class="btn">Añadir Jugador</button>
+                <button type="button" id="generar" class="btn btn-primary">Generar Equipos</button>
+            </div>
+        </form>
         
-        <label for="rol">Rol:</label>
-        <select id="rol" required>
-            <option value="Defensa">Defensa</option>
-            <option value="Medio Campo">Medio Campo</option>
-            <option value="Delantero">Delantero</option>
-        </select>
-        
-        <button type="button" id="añadir">Añadir Jugador</button>
-        <button type="button" id="generar">Generar Equipos</button>
-    </form>
     
-    <h2>Lista de jugadores:</h2>
     <ul id="listaJugadores">
         <li id="listaDefensas">Defensas: <span id="defensasNombres"></span></li>
         <li id="listaMedioCampo">Centrocampistas: <span id="medioCampoNombres"></span></li>
@@ -37,6 +47,7 @@
        <span id="table2"></span>
     </div>
       
+    <button type="button" id="regenerar" class="btn btn-primary" style="display:none;">Volver a generar equipos</button>
     <script>
         let defensas =[];
         let centrocampistas =[];
@@ -74,11 +85,23 @@
                     
                     nombreJugador.value = "";
                 } else {
-                    alert("El campo de texto no puede estar vacío.");
+                    const alertDiv = document.getElementById("alert");
+alertDiv.textContent = "El campo de texto no puede estar vacío.";
+alertDiv.style.display = "block";
+setTimeout(() => {
+    alertDiv.style.display = "none";
+}, 3000);
                 }
             });
 
             guardarBoton.addEventListener("click", generarEquipos);
+            const regenerarBoton = document.getElementById("regenerar");
+regenerarBoton.addEventListener("click", function() {
+    // Limpia las tablas anteriores
+    document.getElementById("listaEquipos").innerHTML = "";
+    // Regenera los equipos
+    generarEquipos();
+});
         });
 
         function shuffle(array) {
@@ -95,6 +118,7 @@
         }
 
         function generarEquipos() {
+            document.getElementById("jugadorRol").style.display = "none";
             shuffle(defensas);
             shuffle(centrocampistas);
             shuffle(delanteros);
@@ -118,6 +142,8 @@
             crearTabla(equipo2, "Equipo 2");       
                 const lista = document.getElementById("listaJugadores");
                 lista.innerHTML="";
+
+                document.getElementById("regenerar").style.display = "block";
         }
 
 
@@ -152,7 +178,9 @@
     tabla.style.marginTop = "20px";
 
     const contenedor = document.getElementById("listaEquipos");
+    
     contenedor.appendChild(tabla);
+
 }
 
 
