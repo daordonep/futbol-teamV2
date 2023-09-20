@@ -10,13 +10,10 @@
 
     <h1>Jugadores</h1>
     
-    <!-- Formulario -->
     <form id="jugadorRol">
-        <!-- Campo de texto -->
         <label for="texto">Jugador:</label>
         <input type="text" id="nombreJugador" required>
         
-        <!-- Selector -->
         <label for="rol">Rol:</label>
         <select id="rol" required>
             <option value="Defensa">Defensa</option>
@@ -24,12 +21,10 @@
             <option value="Delantero">Delantero</option>
         </select>
         
-        <!-- Botones -->
         <button type="button" id="añadir">Añadir Jugador</button>
         <button type="button" id="generar">Generar Equipos</button>
     </form>
     
-    <!-- Lista de elementos -->
     <h2>Lista de jugadores:</h2>
     <ul id="listaJugadores">
         <li id="listaDefensas">Defensas: <span id="defensasNombres"></span></li>
@@ -42,12 +37,6 @@
        <span id="table2"></span>
     </div>
       
-   
-    
-
-
-
-    <!-- Script para manejar el formulario -->
     <script>
         let defensas =[];
         let centrocampistas =[];
@@ -60,7 +49,6 @@
             const agregarBoton = document.getElementById("añadir");
             const guardarBoton = document.getElementById("generar");
            
-            // Al hacer clic en "Agregar a la lista"
             agregarBoton.addEventListener("click", function () {
                 const texto = nombreJugador.value;
                 const opcion = rolSelect.value;
@@ -84,14 +72,12 @@
                             console.log("rol no encontrado");
                     }
                     
-                    // Limpiar el campo de texto
                     nombreJugador.value = "";
                 } else {
                     alert("El campo de texto no puede estar vacío.");
                 }
             });
 
-            // Al hacer clic en "Guardar lista"
             guardarBoton.addEventListener("click", generarEquipos);
         });
 
@@ -127,44 +113,48 @@
 
             console.log("Equipo 1", equipo1);
             console.log("Equipo 2", equipo2);
-            //Longitud de la tabla.
            
-                crearTabla(equipo1,equipo2)           
-                //Quita las listas de los jugadores.
+            crearTabla(equipo1, "Equipo 1");
+            crearTabla(equipo2, "Equipo 2");       
                 const lista = document.getElementById("listaJugadores");
                 lista.innerHTML="";
         }
 
 
-        function crearTabla(equipo1, equipo2) {
-            // Crear el elemento de tabla
-            const tabla = document.createElement("table");
+        function crearTabla(equipo, equipoNombre) {
+    const tabla = document.createElement("table");
 
-            // Crear encabezados de tabla
-            const encabezado = tabla.createTHead();
-            const filaEncabezado = encabezado.insertRow();
-            const encabezado1 = document.createElement("th");          
-            encabezado.textContent = "Equipo 1";
-            filaEncabezado.appendChild(encabezado1);
-            // Crear filas de datos
-            const cuerpo = tabla.createTBody();
-            for (let i = 0; i <= equipo1.length; i++) {
+    const encabezado = tabla.createTHead();
+    const filaEncabezado = encabezado.insertRow();
+    const th = document.createElement("th");
+    th.textContent = equipoNombre;
+    filaEncabezado.appendChild(th);
 
-                equipo1.defensas.forEach(function(elemento){
-                    const fila = cuerpo.insertRow();
-                    const celda1 = fila.insertCell();
-                    celda1.textContent = `${elemento}`;
-                });  
-            }
+    const cuerpo = tabla.createTBody();
 
-            // Agregar estilos (opcional)
-            tabla.style.borderCollapse = "collapse";
-            tabla.style.border = "1px solid #ccc";
+    if(equipo.defensas.length > 0) {
+        const filaDefensas = cuerpo.insertRow();
+        filaDefensas.insertCell().textContent = `Defensas: ${equipo.defensas.join(", ")}`;
+    }
 
-            // Agregar la tabla al contenedor
-            const contenedor = document.getElementById("listaEquipos");
-            contenedor.appendChild(tabla);
-        }
+    if(equipo.centrocampistas.length > 0) {
+        const filaCentrocampistas = cuerpo.insertRow();
+        filaCentrocampistas.insertCell().textContent = `Centrocampistas: ${equipo.centrocampistas.join(", ")}`;
+    }
+
+    if(equipo.delanteros.length > 0) {
+        const filaDelanteros = cuerpo.insertRow();
+        filaDelanteros.insertCell().textContent = `Delanteros: ${equipo.delanteros.join(", ")}`;
+    }
+
+    tabla.style.borderCollapse = "collapse";
+    tabla.style.border = "1px solid #ccc";
+    tabla.style.marginTop = "20px";
+
+    const contenedor = document.getElementById("listaEquipos");
+    contenedor.appendChild(tabla);
+}
+
 
     </script>
 </body>
